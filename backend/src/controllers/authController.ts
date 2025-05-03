@@ -96,108 +96,19 @@ class AuthController {
       await sessionRepo.save(session);
 
       // Set JWT in HTTP-only cookie
-      res.cookie('jwt', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 3600000 // 1 hour
-      });
+      // res.cookie('jwt', token, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === 'production',
+      //   sameSite: 'strict',
+      //   maxAge: 3600000 // 1 hour
+      // });
 
       return res.status(200).json({
         message: 'Login successful',
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role
-        }
+        token
       });
     } catch (error) {
       console.error('Login error:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-  }
-
-  async getSessionActivity(req: Request, res: Response, next: NextFunction) {
-    try {
-      const connection = await dbUtils.getDefaultConnection();
-      const sessionRepo = connection.getRepository(UserSession);
-
-      // Get user ID from authenticated request (assuming middleware sets this)
-      const userId = (req as any).user?.userId;
-      if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-
-      // Get active sessions for the user
-      const activeSessions = await sessionRepo.find({
-        where: {
-          user: { id: userId },
-          isActive: true
-        },
-        order: {
-          lastActiveAt: 'DESC'
-        }
-      });
-
-      // Format session data
-      const sessions = activeSessions.map(session => ({
-        id: session.id,
-        device: session.userAgent,
-        ipAddress: session.ipAddress,
-        loginTime: session.createdAt,
-        lastActive: session.lastActiveAt,
-        isActive: session.isActive
-      }));
-
-      return res.status(200).json({ sessions });
-    } catch (error) {
-      console.error('Error fetching sessions:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-  }
-
-  async doLogout(req: Request, res: Response, next: NextFunction) {
-    try {
-      const connection = await dbUtils.getDefaultConnection();
-      const sessionRepo = connection.getRepository(UserSession);
-
-      // Get current session token
-      const token = req.cookies.jwt || req.headers.authorization?.split(' ')[1];
-
-      // Invalidate current session
-      await sessionRepo.update(
-        { 
-          user: { id: (req as any).user.userId },
-          jwtToken: token,
-          isActive: true
-        },
-        { isActive: false }
-      );
-
-      // Clear JWT cookie
-      res.clearCookie('jwt');
-
-      return res.status(200).json({ message: 'Logged out successfully' });
-    } catch (error) {
-      console.error('Logout error:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-  }
-
-  async getUsers(req: Request, res: Response, next: NextFunction) {
-    try {
-      const connection = await dbUtils.getDefaultConnection();
-      const userRepo = connection.getRepository(User);
-
-      // Get all users (excluding passwords)
-      const users = await userRepo.find({
-        select: ['id', 'name', 'email', 'role']
-      });
-
-      return res.status(200).json({ users });
-    } catch (error) {
-      console.error('Error fetching users:', error);
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
