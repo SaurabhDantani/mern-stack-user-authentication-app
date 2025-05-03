@@ -99,7 +99,7 @@ class AuthController {
       return res.status(200).json({
         message: 'Login successful',
         token,
-        user: userRole
+        role: userRole
       });
     } catch (error) {
       console.error('Login error:', error);

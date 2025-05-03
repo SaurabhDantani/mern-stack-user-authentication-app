@@ -62,7 +62,7 @@ export const authorizeRole = (roles: RoleEnum[]) => {
     }
 
     if (!roles.includes(user.role)) {
-      return res.status(403).json({ message: 'Insufficient permissions' });
+      return res.status(401).json({ message: 'Insufficient permissions' });
     }
 
     next();

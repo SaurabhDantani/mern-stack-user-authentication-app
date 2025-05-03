@@ -15,7 +15,7 @@ function App() {
         <Route path="/" element={<RegistrationForm />} />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/dashboard"
+          path="/admin/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />

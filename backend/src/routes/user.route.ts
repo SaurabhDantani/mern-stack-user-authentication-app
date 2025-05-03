@@ -62,6 +62,16 @@ class UserRoute implements IRouting {
       }
     );
 
+    // Logout specific session by ID
+    app.post(
+      '/sessions/:sessionId/logout',
+      authenticateToken,
+      updateLastActive,
+      (req: Request, res: Response, next: express.NextFunction) => {
+        return user.logoutSessionById(req, res, next);
+      }
+    );
+
   }
 }
 

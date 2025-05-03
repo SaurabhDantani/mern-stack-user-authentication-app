@@ -40,10 +40,14 @@ const Login: React.FC = () => {
       debugger
       // Store token in localStorage
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('user', JSON.stringify(response.data.role));
 
       toast.success('Login successful!');
-      navigate('/dashboard');
+      if (response.data.role === "admin") {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/user/profile');
+      }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Login failed');
     }

@@ -51,7 +51,10 @@ const Dashboard: React.FC = () => {
       if (error.response?.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        navigate('/login');
+        toast.error('Insufficient permissions');
+        setTimeout(()=> {
+          navigate('/login');
+        },1000)
       } else {
         toast.error('Failed to fetch sessions');
       }
@@ -80,7 +83,7 @@ const Dashboard: React.FC = () => {
   const handleSessionLogout = async (sessionId: number) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:8080/api/sessions/${sessionId}/logout`, {}, {
+      await api.post(`/sessions/${sessionId}/logout`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }

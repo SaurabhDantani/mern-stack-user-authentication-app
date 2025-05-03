@@ -112,6 +112,39 @@ class AuthController {
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  async logoutSessionById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const connection = await dbUtils.getDefaultConnection();
+      const sessionRepo = connection.getRepository(UserSession);
+
+      const sessionId = parseInt(req.params.sessionId);
+      const user = (req as any).user as AuthUser;
+
+      // Find the session
+      const session = await sessionRepo.findOne({
+        where: {
+          id: sessionId,
+          user: { id: user.id }
+        }
+      });
+
+      if (!session) {
+        return res.status(404).json({ message: 'Session not found' });
+      }
+
+      // Invalidate the session
+      await sessionRepo.update(
+        { id: sessionId },
+        { isActive: false }
+      );
+
+      return res.status(200).json({ message: 'Session logged out successfully' });
+    } catch (error) {
+      console.error('Error logging out session:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }
 
 export default new AuthController();
