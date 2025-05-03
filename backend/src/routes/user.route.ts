@@ -14,6 +14,7 @@ class UserRoute implements IRouting {
     app.get(
       '/sessions/active',
       authenticateToken,
+      authorizeRole([RoleEnum.Admin]),
       updateLastActive,
       (req: Request, res: Response, next: express.NextFunction) => {
         return user.getSessionActivity(req, res, next);
@@ -33,7 +34,7 @@ class UserRoute implements IRouting {
     app.get(
       `/user/profile`,
       authenticateToken,
-      // authorizeRole([RoleEnum.Admin]),
+      authorizeRole([RoleEnum.Admin, RoleEnum.User]),
       updateLastActive,
       (req: Request, res: Response, next: express.NextFunction) => {
         return user.getProfile(req, res, next);

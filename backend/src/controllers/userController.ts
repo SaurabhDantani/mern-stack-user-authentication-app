@@ -59,7 +59,7 @@ class AuthController {
 
       // Invalidate current session
       await sessionRepo.update(
-        { 
+        {
           user: { id: user.id },
           jwtToken: token,
           isActive: true
@@ -94,20 +94,21 @@ class AuthController {
     try {
       const connection = await dbUtils.getDefaultConnection();
       const userRepo = connection.getRepository(User);
-      const user = (req as any).user as AuthUser;
-      if (!user.id) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-      // Get all users (excluding passwords)
-      const users = await userRepo.find({where:{
-        id:user.id,      
-      },
-      select: ['id', 'name', 'email', 'role']
-    });
 
-      return res.status(200).json({ users });
+      const getUser = (req as any).user as AuthUser;
+      const userId = getUser.id;
+      const user = await userRepo.findOne({
+        where: { id: userId },
+        select: ['id', 'name', 'email', 'role']
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      return res.json(user);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error getting profile:', error);
       return res.status(500).json({ message: 'Internal server error' });
     }
   }

@@ -6,6 +6,7 @@ import RegistrationForm from './pages/Registration';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -22,20 +23,13 @@ function App() {
           }
         />
         <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <div>Admin Dashboard</div>
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/user/profile"
-          element={
-            <ProtectedRoute allowedRoles={['user', 'admin']}>
-              <div>User Profile</div>
-            </ProtectedRoute>
-          }
+          // element={
+          //   <ProtectedRoute allowedRoles={['user', 'admin']}>
+          //     <Profile />
+          //   </ProtectedRoute>
+          // }
+          Component={Profile}
         />
       </Routes>
       <ToastContainer position="top-right" />
