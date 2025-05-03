@@ -20,7 +20,7 @@ class AuthController {
 
       const userExists = await memberRepo
         .createQueryBuilder('user')
-        .where('user.Email = :Email', { Email: email })
+        .where('user.email = :email', { email: email })
         .getOne();
 
       if (userExists) {
@@ -35,7 +35,7 @@ class AuthController {
       });
 
       await memberRepo.save(member);
-      return res.status(200).json('User registered successfully');
+      return res.status(200).json({message:'User registered successfully'});
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: 'error', error });
