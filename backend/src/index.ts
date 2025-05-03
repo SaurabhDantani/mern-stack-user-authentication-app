@@ -5,7 +5,7 @@ import cors from 'cors';
 import dbUtils from './utils/db.utils';
 import * as routes from "./routes";
 import http from 'http'
-const port = 8080
+const port = process.env.PORT || 8080
 import dotenv from 'dotenv';
 dotenv.config();
 
