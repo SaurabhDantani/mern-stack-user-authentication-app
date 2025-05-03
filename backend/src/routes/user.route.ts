@@ -12,7 +12,7 @@ class UserRoute implements IRouting {
 
     // Protected routes
     app.get(
-      'sessions/active',
+      '/sessions/active',
       authenticateToken,
       updateLastActive,
       (req: Request, res: Response, next: express.NextFunction) => {
@@ -22,7 +22,7 @@ class UserRoute implements IRouting {
 
     // Logout route
     app.post(
-      '/logout',
+      '/auth/logout',
       authenticateToken,
       updateLastActive,
       (req: Request, res: Response, next: express.NextFunction) => {

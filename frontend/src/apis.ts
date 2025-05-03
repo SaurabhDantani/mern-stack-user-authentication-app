@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 const API_URL = 'http://localhost:8080';
 // "http://localhost:8080/auth/register"
 const api = axios.create({
-    baseURL: `${API_URL}/api`,
+    baseURL: `${API_URL}`,
     headers: {
         'Content-Type': 'application/json',
     },

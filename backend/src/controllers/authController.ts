@@ -95,17 +95,11 @@ class AuthController {
 
       await sessionRepo.save(session);
 
-      // Set JWT in HTTP-only cookie
-      // res.cookie('jwt', token, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === 'production',
-      //   sameSite: 'strict',
-      //   maxAge: 3600000 // 1 hour
-      // });
-
+      let userRole = user.role == 1 ? "admin" : "user"
       return res.status(200).json({
         message: 'Login successful',
-        token
+        token,
+        user: userRole
       });
     } catch (error) {
       console.error('Login error:', error);

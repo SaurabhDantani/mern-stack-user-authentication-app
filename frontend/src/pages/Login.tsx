@@ -36,8 +36,8 @@ const Login: React.FC = () => {
     }
 
     try {
-      const response = await api.post('/login', formData);
-      
+      const response = await api.post('/auth/login', formData);
+      debugger
       // Store token in localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
