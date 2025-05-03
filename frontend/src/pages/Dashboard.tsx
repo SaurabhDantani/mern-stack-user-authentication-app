@@ -43,7 +43,7 @@ const Dashboard: React.FC = () => {
       const token = localStorage.getItem('token');
       const response = await api.get('/sessions/active', {
         headers: {
-          Authorization: `${token}`
+          Authorization: `Bearer ${token}`
         }
       });
       setSessions(response.data.sessions);
@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
       if (error.response?.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        toast.error('Insufficient permissions');
+        toast.error('Session expired. Please login again.');
         setTimeout(()=> {
           navigate('/login');
         },1000)
@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
   const handleSessionLogout = async (sessionId: number) => {
     try {
       const token = localStorage.getItem('token');
-      await api.post(`/sessions/${sessionId}/logout`, {}, {
+      await api.post(`/auth/sessions/${sessionId}/logout`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }
